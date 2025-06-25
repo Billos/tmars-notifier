@@ -1,11 +1,14 @@
 services:
-  notifier:
+  # Backend service
+  backend:
     build:
       context: .
       dockerfile: Dockerfile
+      target: development
     command: ["dev"]
     volumes:
       - .:/app
+      - /app/node_modules
     env_file:
       - .env
     ports:
@@ -13,5 +16,30 @@ services:
     environment:
       NODE_ENV: development
       LOG_LEVEL: 2
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+  # Frontend development service
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    command: ["dev:frontend"]
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      NODE_ENV: development
+    restart: unless-stopped
+
+  # Redis service for development
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
     restart: unless-stopped
 

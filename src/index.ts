@@ -20,17 +20,13 @@ app.use(express.json())
 // Servir les fichiers statiques du frontend
 app.use(express.static(path.join(__dirname, "../dist/frontend")))
 
-// Route pour servir l'application Vue.js
-app.get("/", (_req, res) => {
-  res.sendFile(path.join(__dirname, "../dist/frontend/index.html"))
-})
-
-app.get("/participants", async (_req, res) => {
+// Routes API avec préfixe /api
+app.get("/api/participants", async (_req, res) => {
   const participants = await tmarsApi.listParticipants()
   return res.json(participants)
 })
 
-app.get("/notification/set/:engine", async (req, res) => {
+app.get("/api/notification/set/:engine", async (req, res) => {
   const { engine } = req.params
   const { username, endpoint } = req.query
   if (typeof username !== "string" || typeof endpoint !== "string") {
@@ -47,13 +43,18 @@ app.get("/notification/set/:engine", async (req, res) => {
   return res.sendStatus(200)
 })
 
-app.get("/notification/test", async (req, res) => {
+app.get("/api/notification/test", async (req, res) => {
   const { username } = req.query
   if (typeof username !== "string") {
     return res.status(400).send("Invalid query parameter")
   }
   await sendNotification(username, "Test notification from Tmars bot")
   return res.sendStatus(200)
+})
+
+// Route pour servir l'application Vue.js (doit être après les routes API)
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../dist/frontend/index.html"))
 })
 
 async function init() {
