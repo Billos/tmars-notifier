@@ -1,4 +1,3 @@
-//prettier-ignore
 const env = {
   port: process.env.PORT || 3000,
   gotifyUrl: process.env.GOTIFY_URL,

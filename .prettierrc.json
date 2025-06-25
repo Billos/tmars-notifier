@@ -16,6 +16,5 @@
     "",
     "^[.]"
   ],
-  "multilineArraysWrapThreshold": 5,
-  "objectWrap": "collapse"
+  "multilineArraysWrapThreshold": 5
 }
