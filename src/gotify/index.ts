@@ -77,23 +77,23 @@ async function getApplicationForUser(userName: string, applicationName: string):
   return application
 }
 
-export async function sendNotification(userName: string, applicationName: string, message: string) {
-  let token = await redis.get(`gotify:${userName}:${applicationName}`)
+export async function setGotifyUrl(userName: string, applicationName: string, url: string): Promise<void> {
+  await redis.set(`gotify:${userName}:${applicationName}`, url)
+}
 
-  if (!token) {
+export async function sendNotification(userName: string, applicationName: string, message: string) {
+  let url = await redis.get(`gotify:${userName}:${applicationName}`)
+
+  if (!url) {
     const application = await getApplicationForUser(userName, applicationName)
     await setImage(userName, application.id)
 
-    // eslint-disable-next-line prefer-destructuring
-    token = application.token
-    await redis.set(`gotify:${userName}:${applicationName}`, token)
+    url = `${env.gotifyUrl}/message?token=${application.token}`
+    await setGotifyUrl(userName, applicationName, url)
   }
 
-  const request: AxiosInstance = axios.create({
-    baseURL: env.gotifyUrl,
-    headers: { "X-Gotify-Key": token },
-  })
-  await request.post("/message", {
+  const request: AxiosInstance = axios.create({})
+  await request.post(url, {
     title: `Tmars Notification for ${userName}`,
     message,
   })
