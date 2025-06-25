@@ -3,7 +3,6 @@ import express from "express"
 import { env } from "./config"
 import { assertNotificationEngine, sendNotification, setNotificationEndpoint, setNotificationEngine } from "./notifications/index"
 import { redis } from "./redis"
-import { UserService } from "./remote/gotify"
 import { TmarsApi } from "./tmars"
 import { SimplePlayerModel } from "./tmars/types/SimpleGameModel"
 
@@ -43,16 +42,10 @@ app.get("/notification/test", async (req, res) => {
 
 const tmarsApi = new TmarsApi()
 async function init() {
-  const gotifyUsers = await UserService.getUsers()
-  console.log("Gotify users fetched:", gotifyUsers)
-  // Gotify run consists of:
-  // - Getting the list of games from Tmars
   const games = await tmarsApi.games()
 
   for (const { gameId } of games) {
     const game = await tmarsApi.game(gameId)
-    // - Fetching users in the active games
-    // - Assert that those users exist in the Gotify server
     for (const user of game.players) {
       setInterval(async () => check(user), 5000)
     }
