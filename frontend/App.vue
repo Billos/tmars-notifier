@@ -14,7 +14,14 @@
           <form @submit.prevent="saveConfiguration" class="form">
             <div class="form-group">
               <label for="username">Nom d'utilisateur</label>
-              <input id="username" v-model="config.username" type="text" placeholder="Votre nom d'utilisateur TMars" required />
+              <select id="username" v-model="config.username" required>
+                <option value="">Sélectionnez un participant</option>
+                <option v-for="participant in participants" :key="participant" :value="participant">
+                  {{ participant }}
+                </option>
+              </select>
+              <small class="help-text" v-if="participantsLoading">Chargement des participants...</small>
+              <small class="help-text" v-else-if="participants.length === 0">Aucun participant trouvé</small>
             </div>
 
             <div class="form-group">
@@ -46,7 +53,12 @@
           <form @submit.prevent="testNotification" class="form">
             <div class="form-group">
               <label for="testUsername">Nom d'utilisateur pour le test</label>
-              <input id="testUsername" v-model="testConfig.username" type="text" placeholder="Nom d'utilisateur" required />
+              <select id="testUsername" v-model="testConfig.username" required>
+                <option value="">Sélectionnez un participant</option>
+                <option v-for="participant in participants" :key="participant" :value="participant">
+                  {{ participant }}
+                </option>
+              </select>
             </div>
 
             <button type="submit" class="btn btn-secondary" :disabled="testLoading">
@@ -65,7 +77,7 @@
 </template>
 
 <script>
-import { ref, computed } from "vue"
+import { ref, computed, onMounted } from "vue"
 
 export default {
   name: "App",
@@ -80,6 +92,8 @@ export default {
       username: "",
     })
 
+    const participants = ref([])
+    const participantsLoading = ref(false)
     const loading = ref(false)
     const testLoading = ref(false)
     const message = ref("")
@@ -113,6 +127,24 @@ export default {
       setTimeout(() => {
         message.value = ""
       }, 5000)
+    }
+
+    const fetchParticipants = async () => {
+      participantsLoading.value = true
+      try {
+        const response = await fetch("/api/participants")
+        if (response.ok) {
+          const data = await response.json()
+          participants.value = data
+        } else {
+          throw new Error("Erreur lors de la récupération des participants")
+        }
+      } catch (error) {
+        showMessage("❌ Erreur lors de la récupération des participants", "error")
+        console.error("Erreur:", error)
+      } finally {
+        participantsLoading.value = false
+      }
     }
 
     const saveConfiguration = async () => {
@@ -153,9 +185,16 @@ export default {
       }
     }
 
+    // Charger les participants au montage du composant
+    onMounted(() => {
+      fetchParticipants()
+    })
+
     return {
       config,
       testConfig,
+      participants,
+      participantsLoading,
       loading,
       testLoading,
       message,
@@ -164,6 +203,7 @@ export default {
       endpointHelpText,
       saveConfiguration,
       testNotification,
+      fetchParticipants,
     }
   },
 }

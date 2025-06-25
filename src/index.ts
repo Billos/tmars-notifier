@@ -8,6 +8,7 @@ import { redis } from "./redis"
 import { TmarsApi } from "./tmars"
 import { SimplePlayerModel } from "./tmars/types/SimpleGameModel"
 
+const tmarsApi = new TmarsApi()
 const app = express()
 
 app.listen(env.port, () => {
@@ -22,6 +23,11 @@ app.use(express.static(path.join(__dirname, "../dist/frontend")))
 // Route pour servir l'application Vue.js
 app.get("/", (_req, res) => {
   res.sendFile(path.join(__dirname, "../dist/frontend/index.html"))
+})
+
+app.get("/participants", async (_req, res) => {
+  const participants = await tmarsApi.listParticipants()
+  return res.json(participants)
 })
 
 app.get("/notification/set/:engine", async (req, res) => {
@@ -50,7 +56,6 @@ app.get("/notification/test", async (req, res) => {
   return res.sendStatus(200)
 })
 
-const tmarsApi = new TmarsApi()
 async function init() {
   const games = await tmarsApi.games()
 
