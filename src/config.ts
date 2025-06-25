@@ -6,6 +6,7 @@ const env = {
   gotifyApplicationName: process.env.GOTIFY_APPLICATION_NAME || "tmars",
   tmarsUrl: process.env.TMARS_URL,
   tmarsToken: process.env.TMARS_TOKEN,
+  redisUrl: process.env.REDIS_URL,
 }
 
 export { env }
