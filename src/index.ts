@@ -1,3 +1,5 @@
+import path from "path"
+
 import express from "express"
 
 import { env } from "./config"
@@ -13,6 +15,14 @@ app.listen(env.port, () => {
 })
 
 app.use(express.json())
+
+// Servir les fichiers statiques du frontend
+app.use(express.static(path.join(__dirname, "../dist/frontend")))
+
+// Route pour servir l'application Vue.js
+app.get("/", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../dist/frontend/index.html"))
+})
 
 app.get("/notification/set/:engine", async (req, res) => {
   const { engine } = req.params
