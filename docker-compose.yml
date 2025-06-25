@@ -1,6 +1,6 @@
 services:
   notifier:
-    image: docker.io/billos/tmars-notifier:1.0.0
+    image: docker.io/billos/tmars-notifier:1.1.0
     env_file:
       - .env
     environment:

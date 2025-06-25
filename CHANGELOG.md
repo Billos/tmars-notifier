@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/Billos/tmars-notifier/compare/1.0.0...1.1.0) (2025-06-25)
+
+
+### Features
+
+* **gotify:** add endpoint to set Gotify URL for users ([cb3b7fc](https://github.com/Billos/tmars-notifier/commit/cb3b7fccb50530fe5f25e838d1749fd56ecef048))
+* **gotify:** add image upload functionality for user applications ([f6af18b](https://github.com/Billos/tmars-notifier/commit/f6af18bf909a1ca927c5928aa19b57313b987df8))
+* **gotify:** integrate Redis for user application management and notification handling ([7777643](https://github.com/Billos/tmars-notifier/commit/7777643591d377135e732498260f4ebe0a099433))
+* **gotify:** Use Gotify URL rather than token only ([2809b9e](https://github.com/Billos/tmars-notifier/commit/2809b9e627544998ef28e7956803147336c15292))
+* **notifications:** refactor notification handling and add support for multiple engines ([76f446f](https://github.com/Billos/tmars-notifier/commit/76f446ff77b010ecafff75601e35f3ad6e3a5334))
+* **redis:** add Redis client implementation and configuration ([dc3d8b6](https://github.com/Billos/tmars-notifier/commit/dc3d8b6d285090bbcd6e41dcf37095dba1530980))
+
 # 1.0.0 (2025-06-25)
 
 
