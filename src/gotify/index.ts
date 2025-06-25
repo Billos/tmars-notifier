@@ -72,20 +72,11 @@ export async function createApplicationForUser(userName: string, applicationName
 }
 
 export async function getApplicationForUser(userName: string, applicationName: string): Promise<Application | undefined> {
-  console.log(`Getting application for user: ${userName}, application: ${applicationName}`)
   const user = await getUser(userName)
   setUser(user)
 
   const applications = await ApplicationService.getApps()
-  const application = applications.find((app) => app.name === applicationName)
-
-  if (application) {
-    console.log(`Found application ${applicationName} for user ${user.name}`)
-    return application
-  } else {
-    console.log(`Application ${applicationName} not found for user ${user.name}`)
-    return undefined
-  }
+  return applications.find((app) => app.name === applicationName)
 }
 
 export async function sendNotification(userName: string, applicationName: string, message: string) {
