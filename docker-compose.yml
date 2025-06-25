@@ -1,0 +1,10 @@
+services:
+  notifier:
+    image: docker.io/billos/tmars-notifier:0.0.0
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: 2
+    restart: unless-stopped
+

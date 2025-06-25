@@ -1,0 +1,17 @@
+services:
+  notifier:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["dev"]
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: 2
+    restart: unless-stopped
+
