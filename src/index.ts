@@ -1,7 +1,7 @@
 import express from "express"
 
 import { env } from "./config"
-import { sendNotification, setGotifyUrl } from "./gotify"
+import { assertNotificationEngine, sendNotification, setNotificationEndpoint, setNotificationEngine } from "./notifications/index"
 import { redis } from "./redis"
 import { UserService } from "./remote/gotify"
 import { TmarsApi } from "./tmars"
@@ -15,14 +15,29 @@ app.listen(env.port, () => {
 
 app.use(express.json())
 
-app.get("/gotify", async (req, res) => {
+app.get("/notification/set/:engine", async (req, res) => {
+  const { engine } = req.params
   const { username, endpoint } = req.query
   if (typeof username !== "string" || typeof endpoint !== "string") {
     return res.status(400).send("Invalid query parameters")
   }
-  console.log(`Setting Gotify URL for user: ${username}, endpoint: ${endpoint}`)
-  await setGotifyUrl(username, env.gotifyApplicationName, endpoint)
-  // await sendNotification(username, env.gotifyApplicationName, endpoint)
+
+  if (!assertNotificationEngine(engine)) {
+    return res.status(400).send("Invalid engine type")
+  }
+
+  console.log(`Setting notification engine for user: ${username}, engine: ${engine}`)
+  await setNotificationEngine(username, engine)
+  await setNotificationEndpoint(username, endpoint)
+  return res.sendStatus(200)
+})
+
+app.get("/notification/test", async (req, res) => {
+  const { username } = req.query
+  if (typeof username !== "string") {
+    return res.status(400).send("Invalid query parameter")
+  }
+  await sendNotification(username, "Test notification from Tmars bot")
   return res.sendStatus(200)
 })
 
@@ -51,7 +66,7 @@ async function check(user: SimplePlayerModel) {
     await redis.set(`tmars:${user.id}:status`, result)
     if (result === "GO") {
       console.log(`User ${user.name} is ready to play!`)
-      await sendNotification(user.name, env.gotifyApplicationName, "Your turn to play!")
+      await sendNotification(user.name, "Your turn to play!")
     }
   }
 }
