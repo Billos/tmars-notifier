@@ -1,7 +1,7 @@
 import express from "express"
 
 import { env } from "./config"
-import { sendNotification } from "./gotify"
+import { sendNotification, setGotifyUrl } from "./gotify"
 import { redis } from "./redis"
 import { UserService } from "./remote/gotify"
 import { TmarsApi } from "./tmars"
@@ -14,6 +14,17 @@ app.listen(env.port, () => {
 })
 
 app.use(express.json())
+
+app.get("/gotify", async (req, res) => {
+  const { username, endpoint } = req.query
+  if (typeof username !== "string" || typeof endpoint !== "string") {
+    return res.status(400).send("Invalid query parameters")
+  }
+  console.log(`Setting Gotify URL for user: ${username}, endpoint: ${endpoint}`)
+  await setGotifyUrl(username, env.gotifyApplicationName, endpoint)
+  // await sendNotification(username, env.gotifyApplicationName, endpoint)
+  return res.sendStatus(200)
+})
 
 const tmarsApi = new TmarsApi()
 async function init() {
