@@ -37,6 +37,17 @@ async function getUser(userName: string): Promise<User> {
   }
 }
 
+async function setImage(userName: string, applicationId: number): Promise<void> {
+  const user = await getUser(userName)
+  setUser(user)
+
+  const url = "http://s3.billos.fr/tmars.png"
+  const response = await fetch(url)
+  const blob = await response.blob()
+  const file = new File([blob], "image.png", { type: blob.type })
+  await ApplicationService.uploadAppImage(file, applicationId)
+}
+
 async function createApplicationForUser(userName: string, applicationName: string): Promise<Application> {
   console.log(`Creating application for user: ${userName}, application: ${applicationName}`)
   const user = await getUser(userName)
@@ -60,6 +71,7 @@ async function getApplicationForUser(userName: string, applicationName: string):
   let application = applications.find((app) => app.name === applicationName)
   if (!application) {
     application = await createApplicationForUser(user.name, env.gotifyApplicationName)
+    await setImage(user.name, application.id)
   }
 
   return application
@@ -70,6 +82,7 @@ export async function sendNotification(userName: string, applicationName: string
 
   if (!token) {
     const application = await getApplicationForUser(userName, applicationName)
+    await setImage(userName, application.id)
 
     // eslint-disable-next-line prefer-destructuring
     token = application.token
