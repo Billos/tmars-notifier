@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from "axios"
 
 import { env } from "../config"
+import { redis } from "../redis"
 import { Application, ApplicationService, OpenAPI, User, UserService } from "../remote/gotify"
 
 function setUser(user: Partial<User>): void {
@@ -19,7 +20,7 @@ function setUser(user: Partial<User>): void {
 
 // This function retrieves the user ID for a given user name from Gotify.
 // If the user does not exist, it creates a new user with the default password.
-export async function getUser(userName: string): Promise<User> {
+async function getUser(userName: string): Promise<User> {
   setUser({ admin: true })
   const users = await UserService.getUsers()
   const lowerName = userName.toLowerCase()
@@ -36,30 +37,10 @@ export async function getUser(userName: string): Promise<User> {
   }
 }
 
-export async function getUserApplications(userName: string): Promise<Application[]> {
-  console.log(`Getting applications for user: ${userName}`)
-  //   const userId = await getUserId(user)
-  const user = await getUser(userName)
-  setUser(user)
-
-  const applications = await ApplicationService.getApps()
-  console.log(`Applications for user ${user.name}: ${applications.length}`)
-
-  return applications
-}
-
-export async function createApplicationForUser(userName: string, applicationName: string): Promise<Application> {
+async function createApplicationForUser(userName: string, applicationName: string): Promise<Application> {
   console.log(`Creating application for user: ${userName}, application: ${applicationName}`)
   const user = await getUser(userName)
   setUser(user)
-
-  const existingApps = await ApplicationService.getApps()
-  const existingApp = existingApps.find((app) => app.name === applicationName)
-
-  if (existingApp) {
-    console.log(`Application ${applicationName} already exists for user ${user.name}`)
-    return existingApp
-  }
 
   const newApp = await ApplicationService.createApp({
     name: applicationName,
@@ -71,24 +52,33 @@ export async function createApplicationForUser(userName: string, applicationName
   return newApp
 }
 
-export async function getApplicationForUser(userName: string, applicationName: string): Promise<Application | undefined> {
+async function getApplicationForUser(userName: string, applicationName: string): Promise<Application> {
   const user = await getUser(userName)
   setUser(user)
 
   const applications = await ApplicationService.getApps()
-  return applications.find((app) => app.name === applicationName)
+  let application = applications.find((app) => app.name === applicationName)
+  if (!application) {
+    application = await createApplicationForUser(user.name, env.gotifyApplicationName)
+  }
+
+  return application
 }
 
 export async function sendNotification(userName: string, applicationName: string, message: string) {
-  const application = await getApplicationForUser(userName, applicationName)
-  if (!application) {
-    console.error(`Application ${applicationName} not found for user ${userName}`)
-    return
+  let token = await redis.get(`gotify:${userName}:${applicationName}`)
+
+  if (!token) {
+    const application = await getApplicationForUser(userName, applicationName)
+
+    // eslint-disable-next-line prefer-destructuring
+    token = application.token
+    await redis.set(`gotify:${userName}:${applicationName}`, token)
   }
 
   const request: AxiosInstance = axios.create({
     baseURL: env.gotifyUrl,
-    headers: { "X-Gotify-Key": application.token },
+    headers: { "X-Gotify-Key": token },
   })
   await request.post("/message", {
     title: `Tmars Notification for ${userName}`,

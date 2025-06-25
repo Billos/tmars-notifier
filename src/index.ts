@@ -1,7 +1,8 @@
 import express from "express"
 
 import { env } from "./config"
-import { createApplicationForUser, getUserApplications, sendNotification } from "./gotify"
+import { sendNotification } from "./gotify"
+import { redis } from "./redis"
 import { UserService } from "./remote/gotify"
 import { TmarsApi } from "./tmars"
 import { SimplePlayerModel } from "./tmars/types/SimpleGameModel"
@@ -27,26 +28,16 @@ async function init() {
     // - Fetching users in the active games
     // - Assert that those users exist in the Gotify server
     for (const user of game.players) {
-      const applications = await getUserApplications(user.name)
-      // has env.gotifyApplicationName in the applications
-      let application = applications.find((app) => app.name === env.gotifyApplicationName)
-      if (!application) {
-        // - Create a tmars application in Gotify if it doesn't exist
-        console.log(`Creating application for user ${user.name}...`)
-        application = await createApplicationForUser(user.name, env.gotifyApplicationName)
-      } else {
-        console.log(`Application already exists for user ${user.name}`)
-      }
       setInterval(async () => check(user), 5000)
     }
   }
 }
 
-const status: Record<string, string> = {}
 async function check(user: SimplePlayerModel) {
+  const currentStatus = await redis.get(`tmars:${user.id}:status`)
   const { result } = await tmarsApi.waitingFor(user.id)
-  if (status[user.id] !== result) {
-    status[user.id] = result
+  if (currentStatus !== result) {
+    await redis.set(`tmars:${user.id}:status`, result)
     if (result === "GO") {
       console.log(`User ${user.name} is ready to play!`)
       await sendNotification(user.name, env.gotifyApplicationName, "Your turn to play!")
