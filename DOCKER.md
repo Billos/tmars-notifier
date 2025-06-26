@@ -82,9 +82,25 @@ REDIS_URL=redis://redis:6379
 GOTIFY_URL=https://your-gotify-server.com
 GOTIFY_ADMIN_TOKEN=your-admin-token
 
-# Port (défaut: 3000)
+# Server Configuration
 PORT=3000
+NODE_ENV=production
+LOG_LEVEL=2
+
+# Production URL (pour le frontend Vite)
+PRODUCTION_URL=https://tmars-notifier.billos.fr
+# Ou votre propre domaine: PRODUCTION_URL=https://your-domain.com
 ```
+
+### Variables d'environnement importantes
+
+- **`PRODUCTION_URL`** : URL complète de votre application en production
+  - Utilisée par Vite pour la configuration CORS et proxy
+  - Par défaut : `https://tmars-notifier.billos.fr`
+  - Doit inclure le protocole (https://)
+
+- **`TMARS_URL`** et **`TMARS_TOKEN`** : Configuration de l'API TMars
+- **`REDIS_URL`** : URL de connexion Redis (requis en production)
 
 ## 🔧 Développement
 
