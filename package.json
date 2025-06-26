@@ -25,7 +25,6 @@
     "@typescript-eslint/parser": "^8.16.0",
     "concurrently": "^9.2.0",
     "eslint": "^9.15.0",
-    "openapi-typescript-codegen": "^0.29.0",
     "prettier": "^3.4.1",
     "prettier-plugin-multiline-arrays": "^3.0.6",
     "prettier-plugin-organize-imports": "^4.1.0",
@@ -51,8 +50,7 @@
     "start": "node build/index.js",
     "start:backend": "node build/index.js",
     "start:prod": "yarn build && yarn start:backend",
-    "type-check": "tsc --noEmit",
-    "types:api:generate": "openapi --input https://raw.githubusercontent.com/gotify/server/v2.6.3/docs/spec.json --output ./src/remote/gotify"
+    "type-check": "tsc --noEmit"
   },
   "license": "GPL-3.0-only"
 }

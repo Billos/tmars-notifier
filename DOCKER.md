@@ -78,10 +78,6 @@ TMARS_TOKEN=your-token
 # Redis (optionnel en dev, requis en prod)
 REDIS_URL=redis://redis:6379
 
-# Gotify (optionnel)
-GOTIFY_URL=https://your-gotify-server.com
-GOTIFY_ADMIN_TOKEN=your-admin-token
-
 # Server Configuration
 PORT=3000
 NODE_ENV=production
