@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/Billos/tmars-notifier/compare/1.2.0...1.3.0) (2025-06-26)
+
+
+### Bug Fixes
+
+* **changelog:** remove duplicate entries and streamline feature list for version 1.2.0 ([1feff14](https://github.com/Billos/tmars-notifier/commit/1feff145f8f056ef14cc1343152b0f2cd18c5b02))
+
+
+### Features
+
+* **gotify:** remove gotify control, this is just a notifier ([6e6507a](https://github.com/Billos/tmars-notifier/commit/6e6507a9ffc8545845802721e9bba7c4103f2037))
+
 # [1.2.0](https://github.com/Billos/tmars-notifier/compare/1.1.0...1.2.0) (2025-06-26)
 
 ### Features

@@ -1,7 +1,7 @@
 services:
   # Main application (backend + frontend)
   notifier:
-    image: docker.io/billos/tmars-notifier:1.2.0
+    image: docker.io/billos/tmars-notifier:1.3.0
     ports:
       - "3000:3000"
     command: ["start:backend"]
