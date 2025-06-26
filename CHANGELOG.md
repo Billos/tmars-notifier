@@ -8,6 +8,18 @@
 * **frontend:** basic interface in Vue ([01c9f89](https://github.com/Billos/tmars-notifier/commit/01c9f89c6329aef72c3deedf0a55e3e6488075f7))
 * **participants:** add participant selection and fetch logic ([e290dc1](https://github.com/Billos/tmars-notifier/commit/e290dc175bb9bf84e5a8d2bd734eab42fa207340))
 * **tmars:** remove unused Gotify user fetching logic from init function ([bda608a](https://github.com/Billos/tmars-notifier/commit/bda608ab3bc08935f9e6244e96917daa78890a56))
+* **vite:** remove production URL handling and simplify API target configuration ([2115515](https://github.com/Billos/tmars-notifier/commit/2115515a147b5fb279f677714903991a35844321))
+
+# [1.2.0](https://github.com/Billos/tmars-notifier/compare/1.1.0...1.2.0) (2025-06-26)
+
+
+### Features
+
+* **docker:** add Docker setup with multi-stage builds for frontend and backend ([158c258](https://github.com/Billos/tmars-notifier/commit/158c258111063beb039d43960c7b3795ac297e52))
+* **env:** add environment configuration for URL and update Docker documentation ([5bb3e35](https://github.com/Billos/tmars-notifier/commit/5bb3e35a4a7e4c627fc8df6e37982099c5688bf3))
+* **frontend:** basic interface in Vue ([01c9f89](https://github.com/Billos/tmars-notifier/commit/01c9f89c6329aef72c3deedf0a55e3e6488075f7))
+* **participants:** add participant selection and fetch logic ([e290dc1](https://github.com/Billos/tmars-notifier/commit/e290dc175bb9bf84e5a8d2bd734eab42fa207340))
+* **tmars:** remove unused Gotify user fetching logic from init function ([bda608a](https://github.com/Billos/tmars-notifier/commit/bda608ab3bc08935f9e6244e96917daa78890a56))
 
 # [1.2.0](https://github.com/Billos/tmars-notifier/compare/1.1.0...1.2.0) (2025-06-26)
 
