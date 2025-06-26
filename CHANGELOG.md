@@ -1,3 +1,18 @@
+# [1.4.0](https://github.com/Billos/tmars-notifier/compare/1.3.0...1.4.0) (2025-06-26)
+
+
+### Bug Fixes
+
+* **config:** set base path for frontend assets ([2c848df](https://github.com/Billos/tmars-notifier/commit/2c848dfe978c09b2acf41de8ff8a29a7df609f63))
+* **notification:** conditionally set notification endpoint if provided ([6330d5f](https://github.com/Billos/tmars-notifier/commit/6330d5f7b500cb285c3c58ede4737e6547c98427))
+
+
+### Features
+
+* **notification:** add Discord notification support and update documentation ([2d22848](https://github.com/Billos/tmars-notifier/commit/2d22848e76e55907c62ccaffbdc3c458f449526f))
+* **notification:** enhance notification system with links and improved logging ([017043e](https://github.com/Billos/tmars-notifier/commit/017043e91e7f1b0da995eee7b7f6f42fe33b973c))
+* **notification:** refactor notification handling with Notifier type for better abstraction ([e87eb6a](https://github.com/Billos/tmars-notifier/commit/e87eb6ad8d0034e78a9c4562738e8b9ea369961e))
+
 # [1.3.0](https://github.com/Billos/tmars-notifier/compare/1.2.0...1.3.0) (2025-06-26)
 
 
