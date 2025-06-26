@@ -17,8 +17,8 @@ app.listen(env.port, () => {
 
 app.use(express.json())
 
-// Servir les fichiers statiques du frontend
-app.use(express.static(path.join(__dirname, "../dist/frontend")))
+// Servir les fichiers statiques du frontend sur /ui
+app.use("/ui", express.static(path.join(__dirname, "../dist/frontend")))
 
 // Routes API avec préfixe /api
 app.get("/api/participants", async (_req, res) => {
@@ -44,6 +44,7 @@ app.get("/api/notification/set/:engine", async (req, res) => {
 })
 
 app.get("/api/notification/test", async (req, res) => {
+  console.log("Testing notification endpoint")
   const { username } = req.query
   if (typeof username !== "string") {
     return res.status(400).send("Invalid query parameter")
@@ -52,8 +53,8 @@ app.get("/api/notification/test", async (req, res) => {
   return res.sendStatus(200)
 })
 
-// Route pour servir l'application Vue.js (doit être après les routes API)
-app.get("*", (_req, res) => {
+// Route pour servir l'application Vue.js sur /ui/*
+app.get("/ui/*", (_req, res) => {
   res.sendFile(path.join(__dirname, "../dist/frontend/index.html"))
 })
 

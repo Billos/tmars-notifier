@@ -88,15 +88,14 @@ NODE_ENV=production
 LOG_LEVEL=2
 
 # Production URL (pour le frontend Vite)
-PRODUCTION_URL=https://tmars-notifier.billos.fr
-# Ou votre propre domaine: PRODUCTION_URL=https://your-domain.com
+PRODUCTION_URL=https://tmars-notifier.your-domain.com
 ```
 
 ### Variables d'environnement importantes
 
 - **`PRODUCTION_URL`** : URL complète de votre application en production
   - Utilisée par Vite pour la configuration CORS et proxy
-  - Par défaut : `https://tmars-notifier.billos.fr`
+  - Par défaut : `https://tmars-notifier.your-domain.com`
   - Doit inclure le protocole (https://)
 
 - **`TMARS_URL`** et **`TMARS_TOKEN`** : Configuration de l'API TMars

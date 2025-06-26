@@ -42,7 +42,7 @@ import { redis } from "../redis"
 //   const user = await getUser(userName)
 //   setUser(user)
 
-//   const url = "http://s3.billos.fr/tmars.png"
+//   const url = "https://raw.githubusercontent.com/terraforming-mars/terraforming-mars/refs/heads/main/assets/favicon.ico"
 //   const response = await fetch(url)
 //   const blob = await response.blob()
 //   const file = new File([blob], "image.png", { type: blob.type })
