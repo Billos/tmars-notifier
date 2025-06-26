@@ -17,6 +17,7 @@ const getApiTarget = () => {
 export default defineConfig({
   plugins: [vue()],
   root: './frontend',
+  base: '/ui/',
   server: {
     host: '0.0.0.0', // Écouter sur toutes les interfaces (nécessaire pour Docker)
     port: 5173,
