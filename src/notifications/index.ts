@@ -42,14 +42,14 @@ export async function getNotificationEndpoint(userName: string): Promise<string 
   return redis.get(`${engine}:${userName}`)
 }
 
-export async function sendNotification(userName: string, message: string) {
+export async function sendNotification(userName: string, message: string, link?: string | null) {
   const engine = await getNotificationEngine(userName)
 
   if (engine === "ntfy") {
-    await Ntfy.sendNotification(userName, message)
+    await Ntfy.sendNotification(userName, message, link)
   } else if (engine === "gotify") {
-    await Gotify.sendNotification(userName, message)
+    await Gotify.sendNotification(userName, message, link)
   } else if (engine === "discord") {
-    await Discord.sendNotification(userName, message)
+    await Discord.sendNotification(userName, message, link)
   }
 }

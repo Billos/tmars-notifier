@@ -8,8 +8,12 @@ export async function getEndpoint(userName: string): Promise<string | null> {
   return redis.get(`discord:${userName}`)
 }
 
-export async function sendNotification(userName: string, message: string): Promise<void> {
+export async function sendNotification(userName: string, message: string, link?: string | null): Promise<void> {
   const webhookUrl = await getEndpoint(userName)
+  if (!webhookUrl) {
+    return
+  }
+  console.log(`Sending Discord notification to ${userName} with message: ${message} and link: ${link} (webhook: ${webhookUrl})`)
 
   const payload = {
     content: `🚀 **TMars Notification**\n\n${message}`,
@@ -19,16 +23,12 @@ export async function sendNotification(userName: string, message: string): Promi
       {
         title: "Terraforming Mars",
         description: message,
+        url: link, // Add the game link to the embed
         color: 0xff6b35, // Orange color for Mars theme
         fields: [
           {
-            name: "Player",
-            value: userName,
-            inline: true,
-          },
-          {
-            name: "Action Required",
-            value: "It's your turn!",
+            name: `Action Required for player ${userName}`,
+            value: link ? `[🎮 Join the game!](${link})` : "It's your turn!",
             inline: true,
           },
         ],

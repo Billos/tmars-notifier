@@ -52,8 +52,19 @@ app.get("/api/notification/test", async (req, res) => {
   if (typeof username !== "string") {
     return res.status(400).send("Invalid query parameter")
   }
-  await sendNotification(username, "Test notification from Tmars bot")
-  return res.sendStatus(200)
+
+  const games = await tmarsApi.games()
+  for (const { gameId } of games) {
+    const game = await tmarsApi.game(gameId)
+    for (const { id, name } of game.players) {
+      if (username === name) {
+        const link = `${env.tmarsUrl}/player?id=${id}`
+        await sendNotification(name, "TEST: Your turn to play!", link)
+        return res.sendStatus(200)
+      }
+    }
+  }
+  return res.sendStatus(404)
 })
 
 // Route pour servir l'application Vue.js sur /ui/*
@@ -79,7 +90,8 @@ async function check(user: SimplePlayerModel) {
     await redis.set(`tmars:${user.id}:status`, result)
     if (result === "GO") {
       console.log(`User ${user.name} is ready to play!`)
-      await sendNotification(user.name, "Your turn to play!")
+      const link = `${env.tmarsUrl}/player?id=${user.id}`
+      await sendNotification(user.name, "Your turn to play!", link)
     }
   }
 }
