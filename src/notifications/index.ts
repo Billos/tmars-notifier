@@ -1,13 +1,15 @@
 import { redis } from "../redis"
+import * as Discord from "./discord"
 import * as Gotify from "./gotify"
 import * as Ntfy from "./ntfy"
 
-type NotificationEngine = "gotify" | "ntfy"
+type NotificationEngine = "gotify" | "ntfy" | "discord"
 
 export function assertNotificationEngine(notificationEngine: string): notificationEngine is NotificationEngine {
   switch (notificationEngine) {
     case "gotify":
     case "ntfy":
+    case "discord":
       return true
     default:
       throw new Error(`Invalid notification engine: ${notificationEngine}`)
@@ -29,6 +31,8 @@ export async function setNotificationEndpoint(userName: string, endpoint: string
     await Gotify.setEndpoint(userName, endpoint)
   } else if (engine === "ntfy") {
     await Ntfy.setEndpoint(userName, endpoint)
+  } else if (engine === "discord") {
+    await Discord.setEndpoint(userName, endpoint)
   }
   await redis.set(`${engine}:${userName}`, endpoint)
 }
@@ -45,5 +49,7 @@ export async function sendNotification(userName: string, message: string) {
     await Ntfy.sendNotification(userName, message)
   } else if (engine === "gotify") {
     await Gotify.sendNotification(userName, message)
+  } else if (engine === "discord") {
+    await Discord.sendNotification(userName, message)
   }
 }

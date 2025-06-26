@@ -9,7 +9,7 @@ TMars Notifier monitors Terraforming Mars game sessions and sends notifications 
 ## ✨ Features
 
 - 🎮 **Game Monitoring**: Automatically monitors TMars games and player status
-- 📱 **Multiple Notification Engines**: Support for ntfy.sh and Gotify
+- 📱 **Multiple Notification Engines**: Support for ntfy.sh, Gotify, and Discord
 - 🖥️ **Modern Web Interface**: Vue.js frontend for easy configuration
 - 🔄 **Real-time Updates**: Live monitoring with configurable intervals
 - 🐳 **Docker Support**: Full containerization for development and production
@@ -22,7 +22,7 @@ TMars Notifier monitors Terraforming Mars game sessions and sends notifications 
 - **Frontend**: Vue.js 3 + Vite
 - **Database**: Redis for caching and configuration
 - **Containerization**: Docker + Docker Compose
-- **Notifications**: ntfy.sh, Gotify
+- **Notifications**: ntfy.sh, Gotify, Discord
 
 ## 🚀 Quick Start
 
@@ -125,7 +125,7 @@ GOTIFY_ADMIN_TOKEN=your-admin-token
 
 - `GET /api/notification/set/:engine` - Configure notification engine
   - Query params: `username`, `endpoint`
-  - Engines: `ntfy`, `gotify`
+  - Engines: `ntfy`, `gotify`, `discord`
 - `GET /api/notification/test` - Test notification
   - Query params: `username`
 
@@ -139,7 +139,7 @@ GOTIFY_ADMIN_TOKEN=your-admin-token
 
 2. **Configure notifications**:
    - Select your username from the participant list
-   - Choose notification engine (ntfy.sh or Gotify)
+   - Choose notification engine (ntfy.sh, Gotify, or Discord)
    - Enter your notification endpoint URL
    - Save configuration
 
@@ -224,6 +224,31 @@ Self-hosted notification server.
 - Endpoint: `https://your-server.com/message?token=YOUR_TOKEN`
 
 **Example**: `https://gotify.example.com/message?token=AbCdEf123456`
+
+### Discord
+
+Rich notifications via Discord webhooks.
+
+**Setup**:
+
+1. Go to your Discord server settings
+2. Navigate to "Integrations" > "Webhooks"
+3. Create a new webhook or use an existing one
+4. Copy the webhook URL
+
+**Configuration**:
+
+- Engine: `discord`
+- Endpoint: `https://discord.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN`
+
+**Example**: `https://discord.com/api/webhooks/123456789012345678/AbCdEfGhIjKlMnOpQrStUvWxYz...`
+
+**Features**:
+
+- Rich embed messages with Mars theme colors
+- Player information display
+- Timestamp and footer branding
+- Custom avatar and username
 
 ## 🏃‍♂️ How It Works
 

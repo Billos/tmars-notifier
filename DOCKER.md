@@ -125,7 +125,7 @@ En production, le frontend est compilé et servi statiquement par le backend Exp
 
 ## 🔍 Monitoring
 
-Le container inclut un health check qui vérifie l'API `/participants` :
+Le container inclut un health check qui vérifie l'API `/api/participants` :
 
 ```bash
 # Vérifier le statut
@@ -137,6 +137,24 @@ docker-compose logs -f notifier
 # Vérifier la santé
 docker inspect --format='{{.State.Health.Status}}' <container-id>
 ```
+
+## 🔔 Notifications Discord
+
+Pour configurer Discord :
+
+1. **Créer un webhook Discord** :
+   - Paramètres du serveur → Intégrations → Webhooks
+   - Créer un nouveau webhook
+   - Copier l'URL du webhook
+
+2. **Configurer dans l'interface** :
+   - Type : `Discord`
+   - Endpoint : `https://discord.com/api/webhooks/ID/TOKEN`
+
+3. **Fonctionnalités** :
+   - Messages enrichis avec thème Mars
+   - Informations du joueur
+   - Horodatage automatique
 
 ## 🚨 Troubleshooting
 

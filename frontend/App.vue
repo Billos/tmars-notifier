@@ -30,12 +30,13 @@
                 <option value="">Sélectionnez un type</option>
                 <option value="ntfy">ntfy.sh</option>
                 <option value="gotify">Gotify</option>
+                <option value="discord">Discord</option>
               </select>
             </div>
 
             <div class="form-group">
               <label for="endpoint">URL d'endpoint</label>
-              <input id="endpoint" v-model="config.endpoint" type="url" :placeholder="endpointPlaceholder" required />
+              <input id="endpoint" v-model="config.endpoint" type="url" :placeholder="endpointPlaceholder" />
               <small class="help-text">{{ endpointHelpText }}</small>
             </div>
 
@@ -105,6 +106,8 @@ export default {
           return "https://ntfy.sh/votre-topic"
         case "gotify":
           return "https://gotify.example.com/message?token=VOTRE_TOKEN"
+        case "discord":
+          return "https://discord.com/api/webhooks/123456789/AbCdEf..."
         default:
           return "URL de votre service de notification"
       }
@@ -116,6 +119,8 @@ export default {
           return "URL de votre topic ntfy.sh (ex: https://ntfy.sh/tmars-notifications)"
         case "gotify":
           return "URL de votre serveur Gotify avec le token d'application"
+        case "discord":
+          return "URL du webhook Discord (Paramètres du serveur > Intégrations > Webhooks)"
         default:
           return "Sélectionnez d'abord un type de notification"
       }
