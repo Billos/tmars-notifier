@@ -39,7 +39,10 @@ app.get("/api/notification/set/:engine", async (req, res) => {
 
   console.log(`Setting notification engine for user: ${username}, engine: ${engine}`)
   await setNotificationEngine(username, engine)
-  await setNotificationEndpoint(username, endpoint)
+  if (endpoint) {
+    console.log(`Setting notification endpoint for user: ${username}, endpoint: ${endpoint}`)
+    await setNotificationEndpoint(username, endpoint)
+  }
   return res.sendStatus(200)
 })
 
