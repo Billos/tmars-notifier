@@ -6,6 +6,13 @@ import * as Ntfy from "./ntfy"
 
 type NotificationEngine = "gotify" | "ntfy" | "discord"
 
+type NotificationData = {
+  id: string
+  name: string
+  placeholder: string
+  helpText: string // Optional help text for the UI
+}
+
 export function assertNotificationEngine(notificationEngine: string): notificationEngine is NotificationEngine {
   switch (notificationEngine) {
     case "gotify":
@@ -28,6 +35,29 @@ function getNotifier(engine: NotificationEngine): Notifier {
     default:
       throw new Error(`Unknown notification engine: ${engine}`)
   }
+}
+
+export function listAvailableNotificationEngines(): NotificationData[] {
+  return [
+    {
+      id: "gotify",
+      name: "Gotify",
+      placeholder: "https://gotify.example.com/message?token=VOTRE_TOKEN",
+      helpText: "URL de votre serveur Gotify avec le token d'application",
+    },
+    {
+      id: "ntfy",
+      name: "Ntfy",
+      placeholder: "https://ntfy.sh/votre-topic",
+      helpText: "URL de votre topic ntfy.sh (ex: https://ntfy.sh/tmars-notifications)",
+    },
+    {
+      id: "discord",
+      name: "Discord",
+      placeholder: "https://discord.com/api/webhooks/123456789/AbCdEf...",
+      helpText: "URL du webhook Discord (Paramètres du serveur > Intégrations > Webhooks)",
+    },
+  ]
 }
 
 export async function setNotificationEngine(userName: string, engine: NotificationEngine): Promise<void> {
@@ -59,6 +89,6 @@ export async function sendNotification(userName: string, message: string, link?:
   try {
     await notifier.sendNotification(userName, message, link)
   } catch (error) {
-    console.log(`Error sending notification to ${userName} using ${engine}:`, error)
+    console.log(`Error sending notification to ${userName} using ${engine}:`)
   }
 }

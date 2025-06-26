@@ -3,7 +3,13 @@ import path from "path"
 import express from "express"
 
 import { env } from "./config"
-import { assertNotificationEngine, sendNotification, setNotificationEndpoint, setNotificationEngine } from "./notifications/index"
+import {
+  assertNotificationEngine,
+  listAvailableNotificationEngines,
+  sendNotification,
+  setNotificationEndpoint,
+  setNotificationEngine,
+} from "./notifications/index"
 import { redis } from "./redis"
 import { TmarsApi } from "./tmars"
 import { SimplePlayerModel } from "./tmars/types/SimpleGameModel"
@@ -25,6 +31,8 @@ app.get("/api/participants", async (_req, res) => {
   const participants = await tmarsApi.listParticipants()
   return res.json(participants)
 })
+
+app.get("/api/notification/engines", (_req, res) => res.json(listAvailableNotificationEngines()))
 
 app.get("/api/notification/set/:engine", async (req, res) => {
   const { engine } = req.params

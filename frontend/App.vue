@@ -28,9 +28,9 @@
               <label for="engine">Type de notification</label>
               <select id="engine" v-model="config.engine" required>
                 <option value="">Sélectionnez un type</option>
-                <option value="ntfy">ntfy.sh</option>
-                <option value="gotify">Gotify</option>
-                <option value="discord">Discord</option>
+                <option v-for="engine in engines" :key="engine.id" :value="engine.id">
+                  {{ engine.name }}
+                </option>
               </select>
             </div>
 
@@ -95,35 +95,21 @@ export default {
 
     const participants = ref([])
     const participantsLoading = ref(false)
+    const engines = ref([])
+    const enginesLoading = ref(false)
     const loading = ref(false)
     const testLoading = ref(false)
     const message = ref("")
     const messageType = ref("")
 
     const endpointPlaceholder = computed(() => {
-      switch (config.value.engine) {
-        case "ntfy":
-          return "https://ntfy.sh/votre-topic"
-        case "gotify":
-          return "https://gotify.example.com/message?token=VOTRE_TOKEN"
-        case "discord":
-          return "https://discord.com/api/webhooks/123456789/AbCdEf..."
-        default:
-          return "URL de votre service de notification"
-      }
+      const engine = engines.value.find(e => e.id === config.value.engine)
+      return engine?.placeholder || "URL de votre service de notification"
     })
 
     const endpointHelpText = computed(() => {
-      switch (config.value.engine) {
-        case "ntfy":
-          return "URL de votre topic ntfy.sh (ex: https://ntfy.sh/tmars-notifications)"
-        case "gotify":
-          return "URL de votre serveur Gotify avec le token d'application"
-        case "discord":
-          return "URL du webhook Discord (Paramètres du serveur > Intégrations > Webhooks)"
-        default:
-          return "Sélectionnez d'abord un type de notification"
-      }
+      const engine = engines.value.find(e => e.id === config.value.engine)
+      return engine?.helpText || "Sélectionnez d'abord un type de notification"
     })
 
     const showMessage = (text, type = "success") => {
@@ -132,6 +118,24 @@ export default {
       setTimeout(() => {
         message.value = ""
       }, 5000)
+    }
+
+    const fetchEngines = async () => {
+      enginesLoading.value = true
+      try {
+        const response = await fetch("/api/notification/engines")
+        if (response.ok) {
+          const data = await response.json()
+          engines.value = data
+        } else {
+          throw new Error("Erreur lors de la récupération des moteurs de notification")
+        }
+      } catch (error) {
+        showMessage("❌ Erreur lors de la récupération des moteurs de notification", "error")
+        console.error("Erreur:", error)
+      } finally {
+        enginesLoading.value = false
+      }
     }
 
     const fetchParticipants = async () => {
@@ -193,6 +197,7 @@ export default {
     // Charger les participants au montage du composant
     onMounted(() => {
       fetchParticipants()
+      fetchEngines()
     })
 
     return {
@@ -200,6 +205,8 @@ export default {
       testConfig,
       participants,
       participantsLoading,
+      engines,
+      enginesLoading,
       loading,
       testLoading,
       message,
@@ -209,6 +216,7 @@ export default {
       saveConfiguration,
       testNotification,
       fetchParticipants,
+      fetchEngines,
     }
   },
 }
