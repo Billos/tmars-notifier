@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/Billos/tmars-notifier/compare/1.4.0...1.5.0) (2025-06-26)
+
+
+### Features
+
+* **notification:** implement dynamic notification engine selection and fetch available engines ([ab6436e](https://github.com/Billos/tmars-notifier/commit/ab6436e159022f488ccedc83bca3017a95f62f7b))
+
 # [1.4.0](https://github.com/Billos/tmars-notifier/compare/1.3.0...1.4.0) (2025-06-26)
 
 
