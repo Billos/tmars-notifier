@@ -26,6 +26,13 @@ export class RedisClient {
     }
     await this.client.set(key, value)
   }
+
+  public async delete(key: string): Promise<void> {
+    if (!this.client) {
+      await this.init()
+    }
+    await this.client.del(key)
+  }
 }
 
 export const redis = new RedisClient()

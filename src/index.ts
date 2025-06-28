@@ -10,9 +10,8 @@ import {
   setNotificationEndpoint,
   setNotificationEngine,
 } from "./notifications/index"
-import { redis } from "./redis"
+import { startGamesRouting } from "./routines/games"
 import { TmarsApi } from "./tmars"
-import { SimplePlayerModel } from "./tmars/types/SimpleGameModel"
 
 const tmarsApi = new TmarsApi()
 const app = express()
@@ -80,28 +79,4 @@ app.get("/ui/*", (_req, res) => {
   res.sendFile(path.join(__dirname, "../dist/frontend/index.html"))
 })
 
-async function init() {
-  const games = await tmarsApi.games()
-
-  for (const { gameId } of games) {
-    const game = await tmarsApi.game(gameId)
-    for (const user of game.players) {
-      setInterval(async () => check(user), 5000)
-    }
-  }
-}
-
-async function check(user: SimplePlayerModel) {
-  const currentStatus = await redis.get(`tmars:${user.id}:status`)
-  const { result } = await tmarsApi.waitingFor(user.id)
-  if (currentStatus !== result) {
-    await redis.set(`tmars:${user.id}:status`, result)
-    if (result === "GO") {
-      console.log(`User ${user.name} is ready to play!`)
-      const link = `${env.tmarsUrl}/player?id=${user.id}`
-      await sendNotification(user.name, "Your turn to play!", link)
-    }
-  }
-}
-
-init()
+startGamesRouting()
