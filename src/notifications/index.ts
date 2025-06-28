@@ -85,8 +85,8 @@ export async function getNotificationEndpoint(userName: string): Promise<string 
 export async function sendNotification(userName: string, message: string, link?: string | null) {
   const engine = await getNotificationEngine(userName)
 
-  const notifier = getNotifier(engine)
   try {
+    const notifier = getNotifier(engine)
     await notifier.sendNotification(userName, message, link)
   } catch (error) {
     console.log(`Error sending notification to ${userName} using ${engine}:`)
