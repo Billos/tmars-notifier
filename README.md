@@ -97,23 +97,17 @@ LOG_LEVEL=2
 
 # Production URL (for frontend CORS)
 PRODUCTION_URL=https://your-domain.com
-
-# Optional: Gotify Configuration
-GOTIFY_URL=https://your-gotify-server.com
-GOTIFY_ADMIN_TOKEN=your-admin-token
 ```
 
 ### Environment Variables
 
-| Variable             | Description                    | Default | Required  |
-| -------------------- | ------------------------------ | ------- | --------- |
-| `TMARS_URL`          | TMars API base URL             | -       | ✅        |
-| `TMARS_TOKEN`        | TMars API authentication token | -       | ✅        |
-| `REDIS_URL`          | Redis connection URL           | -       | ✅        |
-| `PORT`               | Server port                    | `3000`  | ❌        |
-| `PRODUCTION_URL`     | Frontend production URL        | -       | ✅ (prod) |
-| `GOTIFY_URL`         | Gotify server URL              | -       | ❌        |
-| `GOTIFY_ADMIN_TOKEN` | Gotify admin token             | -       | ❌        |
+| Variable         | Description                    | Default | Required  |
+| ---------------- | ------------------------------ | ------- | --------- |
+| `TMARS_URL`      | TMars API base URL             | -       | ✅        |
+| `TMARS_TOKEN`    | TMars API authentication token | -       | ✅        |
+| `REDIS_URL`      | Redis connection URL           | -       | ✅        |
+| `PORT`           | Server port                    | `3000`  | ❌        |
+| `PRODUCTION_URL` | Frontend production URL        | -       | ✅ (prod) |
 
 ## 📡 API Endpoints
 
