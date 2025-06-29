@@ -1,3 +1,16 @@
+# [1.6.0](https://github.com/Billos/tmars-notifier/compare/1.5.0...1.6.0) (2025-06-29)
+
+
+### Bug Fixes
+
+* **notification:** move notifier initialization inside sendNotification function ([204d134](https://github.com/Billos/tmars-notifier/commit/204d1347cafffc0bc08b64d669dcdf9de40ef3e6))
+
+
+### Features
+
+* **games:** implement game and player routines for better management ([02425dd](https://github.com/Billos/tmars-notifier/commit/02425ddb5516eae85915913e3a923bcd2bd786b8))
+* **games:** send notifications to players when a game ends ([975976b](https://github.com/Billos/tmars-notifier/commit/975976b472898a424b85fefdc2a0153ea1899838))
+
 # [1.5.0](https://github.com/Billos/tmars-notifier/compare/1.4.0...1.5.0) (2025-06-26)
 
 
