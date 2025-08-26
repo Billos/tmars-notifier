@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/Billos/tmars-notifier/compare/1.6.0...1.6.1) (2025-08-26)
+
+
+### Bug Fixes
+
+* **participants:** add phase check and player count validation in listParticipants method ([652a203](https://github.com/Billos/tmars-notifier/commit/652a2034fae1a6af67617589d268ef6ebdeb607e))
+
 # [1.6.0](https://github.com/Billos/tmars-notifier/compare/1.5.0...1.6.0) (2025-06-29)
 
 
