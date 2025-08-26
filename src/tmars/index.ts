@@ -3,6 +3,7 @@ import { join } from "path"
 import axios, { AxiosInstance } from "axios"
 
 import { env } from "../config"
+import { Phase } from "./types/phase"
 import { SimpleGameModel } from "./types/SimpleGameModel"
 import { WaitingForModel } from "./types/WaitingForModel"
 
@@ -33,7 +34,17 @@ export class TmarsApi {
     const participants: Set<string> = new Set()
 
     for (const { gameId } of games) {
-      const { players } = await this.game(gameId)
+      const { players, phase } = await this.game(gameId)
+
+      if (players.length <= 1) {
+        console.log(`Game ${gameId} has only one player, skipping`)
+        continue
+      }
+
+      if (phase == Phase.END) {
+        console.log(`Game ${gameId} has ended, ignoring its participants`)
+        continue
+      }
 
       const names = players.map((p) => p.name)
       for (const name of names) {
