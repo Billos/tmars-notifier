@@ -18,8 +18,7 @@
         "assets": [
           "package.json",
           "CHANGELOG.md",
-          "docker-compose.yml",
-          "docker-compose.dev.yml"
+          "docker-compose.yml"
         ],
         "message": "chore(release): Bump version to ${nextRelease.version} [skip ci]"
       }
