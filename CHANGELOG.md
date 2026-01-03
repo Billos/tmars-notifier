@@ -1,3 +1,17 @@
+# [1.7.0](https://github.com/Billos/tmars-notifier/compare/1.6.1...1.7.0) (2026-01-03)
+
+
+### Bug Fixes
+
+* do not lint the changelog as it is automatically generated ([b1d9e10](https://github.com/Billos/tmars-notifier/commit/b1d9e10ce8c54862ddb3cf6beb4ada47b0c4ab56))
+* Linting and formatting ([0ba1c8b](https://github.com/Billos/tmars-notifier/commit/0ba1c8bee80e3869d3b722369d38a70013286627))
+* Use npm i instead of npm ci in Github Actions ([07ccd9d](https://github.com/Billos/tmars-notifier/commit/07ccd9d70ebf29629f0f789c42941e8146e9b057))
+
+
+### Features
+
+* Github Actions for releasing ([bb2941d](https://github.com/Billos/tmars-notifier/commit/bb2941d24980c75683fdc275a09c808abad38dcb))
+
 ## [1.6.1](https://github.com/Billos/tmars-notifier/compare/1.6.0...1.6.1) (2025-08-26)
 
 
