@@ -103,12 +103,12 @@ export default {
     const messageType = ref("")
 
     const endpointPlaceholder = computed(() => {
-      const engine = engines.value.find(e => e.id === config.value.engine)
+      const engine = engines.value.find((e) => e.id === config.value.engine)
       return engine?.placeholder || "URL de votre service de notification"
     })
 
     const endpointHelpText = computed(() => {
-      const engine = engines.value.find(e => e.id === config.value.engine)
+      const engine = engines.value.find((e) => e.id === config.value.engine)
       return engine?.helpText || "Sélectionnez d'abord un type de notification"
     })
 

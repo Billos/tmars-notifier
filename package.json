@@ -2,7 +2,27 @@
   "name": "tmars-notifier",
   "version": "0.0.0",
   "repository": "git@github.com:Billos/tmars-notifier.git",
+  "license": "GPL-3.0-only",
   "author": "billos <billos@billos.fr>",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && yarn build:frontend",
+    "build:frontend": "vite build",
+    "dev": "tsx watch --clear-screen src/index.ts",
+    "dev:all": "concurrently \"yarn dev\" \"yarn dev:frontend\"",
+    "dev:frontend": "vite",
+    "docker:build": "docker build . -t billos/tmars-notifier:latest",
+    "docker:dev": "docker-compose -f docker-compose.dev.yml up --build",
+    "docker:prod": "docker-compose up --build",
+    "docker:stop": "docker-compose down",
+    "format": "prettier . --write",
+    "format-check": "prettier . --check",
+    "lint": "eslint src",
+    "release": "semantic-release",
+    "start": "node build/index.js",
+    "start:backend": "node build/index.js",
+    "start:prod": "yarn build && yarn start:backend",
+    "type-check": "tsc --noEmit"
+  },
   "dependencies": {
     "@vitejs/plugin-vue": "^6.0.0",
     "axios": "^1.10.0",
@@ -32,25 +52,5 @@
     "semantic-release": "^24.2.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
-  },
-  "scripts": {
-    "build": "tsc -p tsconfig.json && yarn build:frontend",
-    "build:frontend": "vite build",
-    "dev": "tsx watch --clear-screen src/index.ts",
-    "dev:frontend": "vite",
-    "dev:all": "concurrently \"yarn dev\" \"yarn dev:frontend\"",
-    "docker:build": "docker build . -t billos/tmars-notifier:latest",
-    "docker:dev": "docker-compose -f docker-compose.dev.yml up --build",
-    "docker:prod": "docker-compose up --build",
-    "docker:stop": "docker-compose down",
-    "format": "prettier . --write",
-    "format-check": "prettier . --check",
-    "lint": "eslint src",
-    "release": "semantic-release",
-    "start": "node build/index.js",
-    "start:backend": "node build/index.js",
-    "start:prod": "yarn build && yarn start:backend",
-    "type-check": "tsc --noEmit"
-  },
-  "license": "GPL-3.0-only"
+  }
 }
