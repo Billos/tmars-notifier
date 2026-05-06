@@ -1,10 +1,11 @@
 import { env } from "../config"
-import { sendNotification } from "../notifications"
+import { deleteNotification, sendNotification } from "../notifications"
 import { redis } from "../redis"
 import { TmarsApi } from "../tmars"
 import { SimplePlayerModel } from "../tmars/types/SimpleGameModel"
 
 const playerIntervals = new Map<string, NodeJS.Timeout>()
+const lastNotificationId = new Map<string, string>()
 
 const tmarsApi = new TmarsApi()
 
@@ -24,6 +25,7 @@ export async function clearPlayer(user: SimplePlayerModel) {
     clearInterval(interval)
     playerIntervals.delete(user.id)
   }
+  lastNotificationId.delete(user.id)
   // Unset the redis status for the player
   console.log(`Removing status for user ${user.name} (${user.id})`)
   await redis.delete(`tmars:${user.id}:status`)
@@ -39,7 +41,18 @@ async function checkPlayer(user: SimplePlayerModel) {
       if (result === "GO") {
         console.log(`User ${user.name} is ready to play!`)
         const link = `${env.tmarsUrl}/player?id=${user.id}`
-        await sendNotification(user.name, "Your turn to play!", link)
+        const notificationId = await sendNotification(user.name, "Your turn to play!", link)
+        if (notificationId) {
+          lastNotificationId.set(user.id, notificationId)
+        }
+      } else if (currentStatus === "GO") {
+        // The waited-for player has changed away from this user — dismiss their notification
+        const notificationId = lastNotificationId.get(user.id)
+        if (notificationId) {
+          console.log(`Deleting last notification ${notificationId} for ${user.name} (${user.id})`)
+          await deleteNotification(user.name, notificationId)
+          lastNotificationId.delete(user.id)
+        }
       }
     }
   } catch (error) {

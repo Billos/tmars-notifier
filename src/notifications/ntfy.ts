@@ -8,10 +8,10 @@ export async function getEndpoint(userName: string): Promise<string | null> {
   return redis.get(`ntfy:${userName}`)
 }
 
-export async function sendNotification(userName: string, message: string, link?: string | null): Promise<void> {
+export async function sendNotification(userName: string, message: string, link?: string | null): Promise<string | null> {
   const endpoint = await getEndpoint(userName)
   if (!endpoint) {
-    return
+    return null
   }
 
   // Convert the link into markdown format
@@ -19,8 +19,33 @@ export async function sendNotification(userName: string, message: string, link?:
 
   console.log(`Sending Ntfy notification to ${userName} with message: ${message} and link: ${link} (endpoint: ${endpoint})`)
 
-  await fetch(endpoint, {
-    method: "POST",
-    body: message + (mdLink ? `\n\n${mdLink}` : ""),
-  })
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      body: message + (mdLink ? `\n\n${mdLink}` : ""),
+    })
+    if (!response.ok) {
+      return null
+    }
+    const data = await response.json()
+    return data?.id ?? null
+  } catch {
+    return null
+  }
+}
+
+export async function deleteNotification(userName: string, notificationId: string): Promise<void> {
+  const endpoint = await getEndpoint(userName)
+  if (!endpoint) {
+    return
+  }
+
+  try {
+    const url = new URL(endpoint)
+    const deleteUrl = `${url.origin}/v1/messages/${notificationId}`
+    await fetch(deleteUrl, { method: "DELETE" })
+    console.log(`Deleted Ntfy notification ${notificationId} for ${userName}`)
+  } catch {
+    // Best-effort deletion — ignore errors
+  }
 }
