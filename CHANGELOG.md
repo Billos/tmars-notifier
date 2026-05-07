@@ -1,3 +1,15 @@
+# [1.8.0](https://github.com/Billos/tmars-notifier/compare/1.7.0...1.8.0) (2026-05-07)
+
+
+### Bug Fixes
+
+* dev compose uses the dev redis ([adfd5fb](https://github.com/Billos/tmars-notifier/commit/adfd5fb962adc33ee8a0d362627b3ab8cfeb0e50))
+
+
+### Features
+
+* Automatically remove the notification of a player when it's not his turn to play ([d5bacf7](https://github.com/Billos/tmars-notifier/commit/d5bacf7ea8dcfd32007d21b346a6102d0a292a64))
+
 # [1.7.0](https://github.com/Billos/tmars-notifier/compare/1.6.1...1.7.0) (2026-01-03)
 
 
