@@ -8,10 +8,10 @@ export async function getEndpoint(userName: string): Promise<string | null> {
   return redis.get(`discord:${userName}`)
 }
 
-export async function sendNotification(userName: string, message: string, link?: string | null): Promise<void> {
+export async function sendNotification(userName: string, message: string, link?: string | null): Promise<string | null> {
   const webhookUrl = await getEndpoint(userName)
   if (!webhookUrl) {
-    return
+    return null
   }
   console.log(`Sending Discord notification to ${userName} with message: ${message} and link: ${link} (webhook: ${webhookUrl})`)
 
@@ -41,15 +41,38 @@ export async function sendNotification(userName: string, message: string, link?:
     ],
   }
 
-  const response = await fetch(webhookUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  })
+  try {
+    const response = await fetch(`${webhookUrl}?wait=true`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
 
-  if (!response.ok) {
-    console.error(`Discord notification failed: ${response.status} ${response.statusText}`)
+    if (!response.ok) {
+      console.error(`Discord notification failed: ${response.status} ${response.statusText}`)
+      return null
+    }
+
+    const data = await response.json()
+    return data?.id ?? null
+  } catch {
+    return null
+  }
+}
+
+export async function deleteNotification(userName: string, notificationId: string): Promise<void> {
+  const webhookUrl = await getEndpoint(userName)
+  if (!webhookUrl) {
+    return
+  }
+
+  try {
+    const deleteUrl = `${webhookUrl}/messages/${notificationId}`
+    await fetch(deleteUrl, { method: "DELETE" })
+    console.log(`Deleted Discord notification ${notificationId} for ${userName}`)
+  } catch {
+    // Best-effort deletion — ignore errors
   }
 }

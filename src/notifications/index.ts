@@ -82,13 +82,25 @@ export async function getNotificationEndpoint(userName: string): Promise<string 
   return redis.get(`${engine}:${userName}`)
 }
 
-export async function sendNotification(userName: string, message: string, link?: string | null) {
+export async function sendNotification(userName: string, message: string, link?: string | null): Promise<string | null> {
   const engine = await getNotificationEngine(userName)
 
   try {
     const notifier = getNotifier(engine)
-    await notifier.sendNotification(userName, message, link)
+    return await notifier.sendNotification(userName, message, link)
   } catch (error) {
     console.log(`Error sending notification to ${userName} using ${engine}:`)
+    return null
+  }
+}
+
+export async function deleteNotification(userName: string, notificationId: string): Promise<void> {
+  const engine = await getNotificationEngine(userName)
+
+  try {
+    const notifier = getNotifier(engine)
+    await notifier.deleteNotification(userName, notificationId)
+  } catch (error) {
+    console.log(`Error deleting notification ${notificationId} for ${userName} using ${engine}:`)
   }
 }
