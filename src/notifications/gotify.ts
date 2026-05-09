@@ -1,5 +1,3 @@
-import axios, { AxiosInstance } from "axios"
-
 import { redis } from "../redis"
 
 export async function setEndpoint(userName: string, endpoint: string): Promise<void> {
@@ -19,18 +17,25 @@ export async function sendNotification(userName: string, message: string, link?:
   // Convert the link into markdown format
   const mdLink = link ? `[Click here](${link})` : null
 
-  const request: AxiosInstance = axios.create({})
   try {
-    const response = await request.post(endpoint, {
-      title: `Tmars Notification for ${userName}`,
-      message: message + (mdLink ? `\n\n${mdLink}` : ""),
-      extras: {
-        "client::display": {
-          contentType: "text/markdown",
+    const url = new URL(endpoint)
+    const result = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: `Tmars Notification for ${userName}`,
+        message: message + (mdLink ? `\n\n${mdLink}` : ""),
+        extras: {
+          "client::display": {
+            contentType: "text/markdown",
+          },
         },
-      },
+      }),
     })
-    return response.data?.id != null ? String(response.data.id) : null
+
+    const response = await result.json()
+
+    return response.id != null ? String(response.id) : null
   } catch {
     return null
   }
@@ -43,11 +48,12 @@ export async function deleteNotification(userName: string, notificationId: strin
   }
 
   try {
-    const url = new URL(endpoint)
-    const token = url.searchParams.get("token")
-    const deleteUrl = `${url.origin}/message/${notificationId}`
-    const request: AxiosInstance = axios.create({})
-    await request.delete(deleteUrl, ...(token ? [{ params: { token } }] : []))
+    const endpointUrl = new URL(endpoint)
+    const token = endpointUrl.searchParams.get("token")
+    const deleteUrl = new URL(`${endpointUrl.origin}/message/${notificationId}`)
+    deleteUrl.searchParams.append("token", token ?? "")
+
+    await fetch(deleteUrl, { method: "DELETE" })
     console.log(`Deleted Gotify notification ${notificationId} for ${userName}`)
   } catch {
     // Best-effort deletion — ignore errors

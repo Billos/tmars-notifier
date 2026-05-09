@@ -1,6 +1,5 @@
 import { join } from "path"
 
-import axios, { AxiosInstance } from "axios"
 
 import { env } from "../config"
 import { Phase } from "./types/phase"
@@ -14,19 +13,12 @@ type Games = {
 }[]
 
 export class TmarsApi {
-  private request: AxiosInstance = axios.create({
-    baseURL: join(env.tmarsUrl, "api"),
-    params: { serverId: env.tmarsToken },
-  })
-
   public async games(): Promise<Games> {
-    const result = await this.request.get<Games>("/games")
-    return result.data
+    return this.request<Games>("/games", {})
   }
 
   public async game(id: string): Promise<SimpleGameModel> {
-    const result = await this.request.get<SimpleGameModel>("/game", { params: { id } })
-    return result.data
+    return this.request<SimpleGameModel>("/game", { id })
   }
 
   public async listParticipants(): Promise<string[]> {
@@ -56,7 +48,20 @@ export class TmarsApi {
   }
 
   public async waitingFor(id: string): Promise<WaitingForModel> {
-    const result = await this.request.get<WaitingForModel>("/waitingfor", { params: { id } })
-    return result.data
+    return this.request<WaitingForModel>("/waitingfor", { id })
+  }
+
+  private async request<T>(endpoint: string, params: Record<string, string>): Promise<T> {
+    const url = new URL(join(env.tmarsUrl, "api", endpoint))
+    url.searchParams.append("serverId", env.tmarsToken)
+    for (const [key, value] of Object.entries(params)) {
+      url.searchParams.append(key, value)
+    }
+    const result = await fetch(url)
+    if (!result.ok) {
+      throw new Error(`Failed to fetch ${endpoint} with params ${JSON.stringify(params)}: ${result.status} ${result.statusText}`)
+    }
+    const data = await result.json()
+    return data as T
   }
 }
