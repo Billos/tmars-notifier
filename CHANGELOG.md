@@ -1,3 +1,10 @@
+## [1.8.2](https://github.com/Billos/tmars-notifier/compare/1.8.1...1.8.2) (2026-05-09)
+
+
+### Bug Fixes
+
+* Repair notification delete ([2a94f3f](https://github.com/Billos/tmars-notifier/commit/2a94f3fe763ea4c12b6ec472744bb8d5487a523a))
+
 ## [1.8.1](https://github.com/Billos/tmars-notifier/compare/1.8.0...1.8.1) (2026-05-09)
 
 
