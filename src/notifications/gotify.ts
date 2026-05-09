@@ -14,14 +14,18 @@ export async function sendNotification(userName: string, message: string, link?:
     return null
   }
 
+  const endpointUrl = new URL(endpoint)
+  const appToken = endpointUrl.searchParams.get("appToken")
+  const clientToken = endpointUrl.searchParams.get("clientToken")
+
   // Convert the link into markdown format
   const mdLink = link ? `[Click here](${link})` : null
-
   try {
     const url = new URL(endpoint)
+    url.searchParams.set("token", appToken)
     const result = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-Gotify-Key": clientToken ?? "" },
       body: JSON.stringify({
         title: `Tmars Notification for ${userName}`,
         message: message + (mdLink ? `\n\n${mdLink}` : ""),
@@ -49,12 +53,20 @@ export async function deleteNotification(userName: string, notificationId: strin
 
   try {
     const endpointUrl = new URL(endpoint)
-    const token = endpointUrl.searchParams.get("token")
+    const clientToken = endpointUrl.searchParams.get("clientToken")
     const deleteUrl = new URL(`${endpointUrl.origin}/message/${notificationId}`)
-    deleteUrl.searchParams.append("token", token ?? "")
 
-    await fetch(deleteUrl, { method: "DELETE" })
-    console.log(`Deleted Gotify notification ${notificationId} for ${userName}`)
+    const result = await fetch(deleteUrl, {
+      method: "DELETE",
+      headers: {
+        "X-Gotify-Key": clientToken ?? "",
+      },
+    })
+    if (result.ok) {
+      console.log(`Deleted Gotify notification ${notificationId} for ${userName}`)
+    } else {
+      console.log(`Could not delete Gotify notification ${notificationId} for ${userName}`)
+    }
   } catch {
     // Best-effort deletion — ignore errors
   }

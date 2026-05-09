@@ -42,7 +42,7 @@ export function listAvailableNotificationEngines(): NotificationData[] {
     {
       id: "gotify",
       name: "Gotify",
-      placeholder: "https://gotify.example.com/message?token=VOTRE_TOKEN",
+      placeholder: "https://gotify.example.com/message?clientToken=VOTRE_CLIENT_TOKEN&appToken=VOTRE_APP_TOKEN",
       helpText: "URL de votre serveur Gotify avec le token d'application",
     },
     {
