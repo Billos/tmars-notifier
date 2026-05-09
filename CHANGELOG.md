@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/Billos/tmars-notifier/compare/1.8.0...1.8.1) (2026-05-09)
+
+
+### Bug Fixes
+
+* remove axios from dependencies ([682bd17](https://github.com/Billos/tmars-notifier/commit/682bd172c37fed2f0c8afeb0ccde9d4f52eefa12))
+
 # [1.8.0](https://github.com/Billos/tmars-notifier/compare/1.7.0...1.8.0) (2026-05-07)
 
 
