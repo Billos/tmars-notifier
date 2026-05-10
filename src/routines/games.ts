@@ -37,7 +37,7 @@ async function checkGame(gameId: string) {
         // const link = //https://tmars.labki.net/the-end?id=p23f7751cee0a
         const link = `${env.tmarsUrl}/the-end?id=${user.id}`
 
-        await sendNotification(user.name, `Game ${gameId} has ended`, link)
+        await sendNotification(user.id, user.name, `Game ${gameId} has ended`, link)
       }
 
       await clearGame(gameId)

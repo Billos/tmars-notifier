@@ -40,10 +40,7 @@ async function checkPlayer(user: SimplePlayerModel) {
       if (result === "GO") {
         console.log(`User ${user.name} is ready to play!`)
         const link = `${env.tmarsUrl}/player?id=${user.id}`
-        const notificationId = await sendNotification(user.name, "Your turn to play!", link)
-        if (notificationId) {
-          await redis.set(`tmars:${user.id}:notification`, notificationId)
-        }
+        await sendNotification(user.id, user.name, "Your turn to play!", link)
       } else if (currentStatus === "GO") {
         // The waited-for player has changed away from this user — dismiss their notification
         const notificationId = await redis.get(`tmars:${user.id}:notification`)

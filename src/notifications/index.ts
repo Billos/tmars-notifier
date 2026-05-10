@@ -85,12 +85,22 @@ export async function getNotificationEndpoint(userName: string): Promise<string 
   return redis.get(`${engine}:${userName}`)
 }
 
-export async function sendNotification(userName: string, message: string, link?: string | null): Promise<string | null> {
+export async function sendNotification(userId: string, userName: string, message: string, link?: string | null): Promise<string | null> {
   const engine = await getNotificationEngine(userName)
 
   try {
     const notifier = getNotifier(engine)
-    return await notifier.sendNotification(userName, message, link)
+
+    const oldNotif = await redis.get(`tmars:${userId}:notification`)
+    if (oldNotif) {
+      await deleteNotification(userName, oldNotif)
+    }
+
+    const notificationId = await notifier.sendNotification(userName, message, link)
+    if (notificationId) {
+      await redis.set(`tmars:${userId}:notification`, notificationId)
+    }
+    return notificationId
   } catch (error) {
     console.log(`Error sending notification to ${userName} using ${engine}:`)
     return null

@@ -5,13 +5,11 @@ import express from "express"
 import { env } from "./config"
 import {
   assertNotificationEngine,
-  deleteNotification,
   listAvailableNotificationEngines,
   sendNotification,
   setNotificationEndpoint,
   setNotificationEngine,
 } from "./notifications/index"
-import { redis } from "./redis"
 import { startGamesRouting } from "./routines/games"
 import { TmarsApi } from "./tmars"
 
@@ -68,16 +66,7 @@ app.get("/api/notification/test", async (req, res) => {
     for (const { id, name } of game.players) {
       if (username === name) {
         const link = `${env.tmarsUrl}/player?id=${id}`
-
-        const oldNotif = await redis.get(`tmars:${id}:notification`)
-        if (oldNotif) {
-          await deleteNotification(name, oldNotif)
-        }
-
-        const notificationId = await sendNotification(name, "TEST: Your turn to play!", link)
-        if (notificationId) {
-          await redis.set(`tmars:${id}:notification`, notificationId)
-        }
+        await sendNotification(id, name, "TEST: Your turn to play!", link)
         return res.sendStatus(200)
       }
     }
