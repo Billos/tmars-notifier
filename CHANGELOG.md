@@ -1,3 +1,10 @@
+## [1.8.4](https://github.com/Billos/tmars-notifier/compare/1.8.3...1.8.4) (2026-05-10)
+
+
+### Bug Fixes
+
+* repair ([e04b209](https://github.com/Billos/tmars-notifier/commit/e04b2098c0741f09965e8875d1d5afe6d54aa87c))
+
 ## [1.8.3](https://github.com/Billos/tmars-notifier/compare/1.8.2...1.8.3) (2026-05-10)
 
 
