@@ -55,7 +55,7 @@ async function checkPlayer(user: SimplePlayerModel) {
       }
     }
   } catch (error) {
-    console.error(`Error checking player ${user.name} (${user.id}):`, error.message)
+    console.error(`Error checking player ${user.name} (${user.id}):`, (error as Error).message)
     return
   }
 }

@@ -22,7 +22,7 @@ export async function sendNotification(userName: string, message: string, link?:
   const mdLink = link ? `[Click here](${link})` : null
   try {
     const url = new URL(endpoint)
-    url.searchParams.set("token", appToken)
+    url.searchParams.set("token", appToken ?? "")
     const result = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Gotify-Key": clientToken ?? "" },

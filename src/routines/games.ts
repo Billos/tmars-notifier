@@ -48,7 +48,7 @@ async function checkGame(gameId: string) {
       await startPlayerRoutine(user)
     }
   } catch (error) {
-    console.error(`Error checking game ${gameId}:`, error.message)
+    console.error(`Error checking game ${gameId}:`, (error as Error).message)
   }
 }
 

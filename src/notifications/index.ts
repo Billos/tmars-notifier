@@ -64,9 +64,12 @@ export async function setNotificationEngine(userName: string, engine: Notificati
   await redis.set(`notification:${userName}`, engine)
 }
 
-export async function getNotificationEngine(userName: string): Promise<NotificationEngine | null> {
+export async function getNotificationEngine(userName: string): Promise<NotificationEngine> {
   const value = await redis.get(`notification:${userName}`)
-  return value as NotificationEngine | null
+  if (!value) {
+    throw new Error(`No notification engine set for user: ${userName}`)
+  }
+  return value as NotificationEngine
 }
 
 export async function setNotificationEndpoint(userName: string, endpoint: string): Promise<void> {
