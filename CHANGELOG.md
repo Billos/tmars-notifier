@@ -3,6 +3,14 @@
 
 ### Bug Fixes
 
+* repair build ([018e08f](https://github.com/Billos/tmars-notifier/commit/018e08f8506dac0ef2f34a55db884e0ca79ba006))
+* review lint and types errors ([c6eed32](https://github.com/Billos/tmars-notifier/commit/c6eed329711365ff2fd0addae7385043d8153e50))
+
+## [1.8.3](https://github.com/Billos/tmars-notifier/compare/1.8.2...1.8.3) (2026-05-10)
+
+
+### Bug Fixes
+
 * review lint and types errors ([c6eed32](https://github.com/Billos/tmars-notifier/commit/c6eed329711365ff2fd0addae7385043d8153e50))
 
 ## [1.8.2](https://github.com/Billos/tmars-notifier/compare/1.8.1...1.8.2) (2026-05-09)
