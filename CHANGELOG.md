@@ -1,3 +1,10 @@
+## [1.8.6](https://github.com/Billos/tmars-notifier/compare/1.8.5...1.8.6) (2026-05-12)
+
+
+### Bug Fixes
+
+* npm version when release ([f868fb4](https://github.com/Billos/tmars-notifier/commit/f868fb44ea64ebc2c6fc727b33bab8f3961f9adc))
+
 ## [1.8.5](https://github.com/Billos/tmars-notifier/compare/1.8.4...1.8.5) (2026-05-12)
 
 
