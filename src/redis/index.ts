@@ -34,6 +34,12 @@ export class RedisClient {
     const client = await this.getClient()
     await client.del(key)
   }
+
+  /** Atomically set key=value only if the key does not exist. Returns true if the key was set. */
+  public async setNX(key: string, value: string): Promise<boolean> {
+    const client = await this.getClient()
+    return client.setNX(key, value)
+  }
 }
 
 export const redis = new RedisClient()
