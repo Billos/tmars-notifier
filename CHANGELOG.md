@@ -1,3 +1,10 @@
+## [1.8.7](https://github.com/Billos/tmars-notifier/compare/1.8.6...1.8.7) (2026-05-20)
+
+
+### Bug Fixes
+
+* Prevent duplicate notifications for ended games ([edb0656](https://github.com/Billos/tmars-notifier/commit/edb065608e07815a8f01dc54e2042f0cb7e49824))
+
 ## [1.8.6](https://github.com/Billos/tmars-notifier/compare/1.8.5...1.8.6) (2026-05-12)
 
 
