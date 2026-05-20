@@ -1,5 +1,6 @@
 import { env } from "../config"
 import { sendNotification } from "../notifications"
+import { redis } from "../redis"
 import { TmarsApi } from "../tmars"
 import { Phase } from "../tmars/types/phase"
 import { clearPlayer, startPlayerRoutine } from "./players"
@@ -33,12 +34,14 @@ async function checkGame(gameId: string) {
     if (game.phase == Phase.END) {
       console.log(`Game ${gameId} has ended`)
 
-      for (const user of game.players) {
-        // const link = //https://tmars.labki.net/the-end?id=p23f7751cee0a
-        const link = `${env.tmarsUrl}/the-end?id=${user.id}`
-
-        await sendNotification(user.id, user.name, `Game ${gameId} has ended`, link)
+      const alreadyNotified = await redis.get(`tmars:game:${gameId}:ended`)
+      if (!alreadyNotified) {
+        for (const user of game.players) {
+          const link = `${env.tmarsUrl}/the-end?id=${user.id}`
+          await sendNotification(user.id, user.name, `Game ${gameId} has ended`, link)
+        }
       }
+      await redis.set(`tmars:game:${gameId}:ended`, "true")
 
       await clearGame(gameId)
       return
